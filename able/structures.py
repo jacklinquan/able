@@ -15,7 +15,7 @@ class Advertisement(object):
     True
     """
 
-    AD = namedtuple("AD", ['ad_type', 'data'])
+    AD = namedtuple("AD", ['ad_len', 'ad_type', 'data'])
 
     class ad_types:
         """
@@ -52,7 +52,7 @@ class Advertisement(object):
             next_pos = pos + length + 1
             if ad_type:
                 segment = slice(pos + 2, next_pos)
-                yield Advertisement.AD(ad_type, bytearray(data[segment]))
+                yield Advertisement.AD(length, ad_type, bytearray(data[segment]))
             pos = next_pos
 
 
