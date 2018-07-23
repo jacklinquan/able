@@ -20,7 +20,7 @@ class PythonBluetooth(PythonJavaClass):
     @java_method('(Landroid/bluetooth/BluetoothDevice;I[B)V')
     def on_device(self, device, rssi, record):
         self.dispatcher.dispatch('on_device', device, rssi,
-                                 Advertisement(record))
+                                 bytearray(record))
 
     @java_method('(Z)V')
     def on_scan_started(self, success):
