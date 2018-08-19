@@ -5,6 +5,18 @@ Android Bluetooth Low Energy
 
 Generated documentation: http://able.readthedocs.org
 
+Changes to the API:
+1: on_device(device, rssi, raw_ad)
+device event handler. Event is dispatched when device is found during a scan.
+
+Parameters:	
+device – BluetoothDevice Java object
+rssi – the RSSI value for the remote device
+raw_ad – raw advertisement bytearray
+
+2: new method added
+enable_indications(characteristic)
+"enabling indication" is needed for some device like micro:bit to use ble uart read function.
 
 Build
 -----
