@@ -12,8 +12,11 @@ Changes to the API:
 device event handler. Event is dispatched when device is found during a scan.
 
 Parameters:	
+
 device – BluetoothDevice Java object
+
 rssi – the RSSI value for the remote device
+
 raw_ad – raw advertisement bytearray
 
 2: new method added
