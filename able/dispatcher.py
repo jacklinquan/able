@@ -93,6 +93,15 @@ class BluetoothDispatcherBase(EventDispatcher):
         """
         return True
 
+    def enable_indications(self, characteristic):
+        """Enable indications for a given characteristic
+
+        To disable indications, use enable_notifications(characteristic, False)
+        :param characteristic: BluetoothGattCharacteristic Java object
+        :return: True, if the operation was initiated successfully
+        """
+        return True
+    
     @ble_task
     def write_descriptor(self, descriptor, value):
         """Set and write the value of a given descriptor to the associated
