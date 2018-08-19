@@ -15,6 +15,7 @@ Classes
              close_gatt,
              discover_services,
              enable_notifications,
+             enable_indications,
              write_descriptor,
              write_characteristic,
              read_characteristic,
