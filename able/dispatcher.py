@@ -160,13 +160,13 @@ class BluetoothDispatcherBase(EventDispatcher):
         """
         pass
 
-    def on_device(self, device, rssi, advertisement):
+    def on_device(self, device, rssi, raw_ad):
         """`device` event handler.
         Event is dispatched when device is found during a scan.
 
         :param device: BluetoothDevice Java object
         :param rssi: the RSSI value for the remote device
-        :param advertisement: :class:`Advertisement` data record
+        :param raw_ad: raw advertisement bytearray
         """
         pass
 
