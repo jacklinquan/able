@@ -1,8 +1,16 @@
 """
 Android Bluetooth Low Energy
 """
-from pythonforandroid.toolchain import (PythonRecipe, shprint,
-                                        current_directory, info)
+try:
+    from pythonforandroid.toolchain import (
+        PythonRecipe,
+        shprint,
+        current_directory,
+        info
+    )
+except:
+    from pythonforandroid.recipe import PythonRecipe
+    from pythonforandroid.toolchain import current_directory, info, shprint
 import sh
 from os.path import join
 
