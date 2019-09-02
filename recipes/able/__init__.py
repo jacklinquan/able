@@ -1,8 +1,8 @@
 """
 Android Bluetooth Low Energy
 """
-from pythonforandroid.toolchain import (PythonRecipe, shprint,
-                                        current_directory, info)
+from pythonforandroid.recipe import PythonRecipe
+from pythonforandroid.toolchain import current_directory, info, shprint
 import sh
 from os.path import join
 
@@ -11,7 +11,7 @@ class AbleRecipe(PythonRecipe):
     version = 'master'
     url = 'https://github.com/b3b/able/archive/{version}.zip'
     name = 'able'
-    depends = [('python2', 'python3crystax'), 'setuptools', 'android']
+    depends = [('python2', 'python3'), 'setuptools', 'android']
     call_hostpython_via_targetpython = False
     install_in_hostpython = True
 
