@@ -22,16 +22,17 @@ class BluetoothDispatcherBase(EventDispatcher):
         'on_connection_state_change', 'on_characteristic_changed',
         'on_characteristic_read', 'on_characteristic_write',
         'on_descriptor_read', 'on_descriptor_write',
-        'on_gatt_release', 'on_error',
+        'on_gatt_release', 'on_error', 'on_rssi_updated'
     )
     queue_class = BLEQueue
 
     def __init__(self, queue_timeout=0.5, enable_ble_code=0xab1e):
         super(BluetoothDispatcherBase, self).__init__()
         self.queue_timeout = queue_timeout
+        self.enable_ble_code = enable_ble_code
+        self._remote_device_address = None
         self._set_ble_interface()
         self._set_queue()
-        self.enable_ble_code = enable_ble_code
 
     def _set_ble_interface(self):
         self._ble = BLEError('BLE is not implemented for platform')
@@ -67,6 +68,7 @@ class BluetoothDispatcherBase(EventDispatcher):
         The status of the scan start are reported with
         :func:`scan_started <on_scan_started>` event.
         """
+        self._remote_device_address = None
         if self._check_runtime_permissions():
             self._ble.startScan(self.enable_ble_code)
         else:
@@ -76,6 +78,16 @@ class BluetoothDispatcherBase(EventDispatcher):
         """Stop the ongoing scan for devices.
         """
         self._ble.stopScan()
+
+    def connect_by_device_address(self, address: str):
+        """Connect to GATT Server of the device with a given Bluetooth hardware address, without scanning.
+        Start a system activity that allows the user to turn on Bluetooth if Bluetooth is not enabled.
+
+        :param address: Bluetooth hardware address string in "XX:XX:XX:XX:XX:XX" format
+        :raises:
+            ValueError: if `address` is not a valid Bluetooth address
+        """
+        pass
 
     def connect_gatt(self, device):
         """Connect to GATT Server hosted by device
@@ -96,11 +108,12 @@ class BluetoothDispatcherBase(EventDispatcher):
         """
         return self.gatt.discoverServices()
 
-    def enable_notifications(self, characteristic, enable=True):
-        """Enable or disable notifications for a given characteristic
+    def enable_notifications(self, characteristic, enable=True, indication=False):
+        """Enable/disable notifications or indications for a given characteristic
 
         :param characteristic: BluetoothGattCharacteristic Java object
         :param enable: enable notifications if True, else disable notifications
+        :param indication: handle indications instead of notifications
         :return: True, if the operation was initiated successfully
         """
         return True
@@ -136,6 +149,13 @@ class BluetoothDispatcherBase(EventDispatcher):
         :param characteristic: BluetoothGattCharacteristic Java object
         """
         self._ble.readCharacteristic(characteristic)
+
+    @ble_task
+    def update_rssi(self):
+        """Triggers an update for the RSSI from the associated remote device
+        Event is dispatched at every RSSI update completed operation
+        """
+        self._ble.readRemoteRssi()
 
     def on_error(self, msg):
         """Error handler
@@ -232,6 +252,15 @@ class BluetoothDispatcherBase(EventDispatcher):
         """`descriptor_write` event handler
 
         :param descriptor: BluetoothGattDescriptor Java object
+        :param status: status of the operation,
+                       `GATT_SUCCESS` if the operation succeeds
+        """
+        pass
+
+    def on_rssi_updated(self, rssi, status):
+        """`on_rssi_updated` event handler
+
+        :param rssi: integer containing RSSI value in dBm
         :param status: status of the operation,
                        `GATT_SUCCESS` if the operation succeeds
         """
